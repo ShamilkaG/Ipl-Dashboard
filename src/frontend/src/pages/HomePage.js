@@ -1,42 +1,33 @@
-import {React,useEffect,useState} from 'react'
-import { useParams,Link } from 'react-router-dom'
-import { MatchDetailCard } from '../components/MatchDetailCard'
-import { MatchSmallCard } from '../components/MatchSmallCard'
-import { PieChart } from 'react-minimal-pie-chart';
+import { React, useEffect, useState } from "react";
 
-import './HomePage.scss';
-import { TeamTile } from '../components/TeamTile';
+import "./HomePage.scss";
+import { TeamTile } from "../components/TeamTile";
 
 export const HomePage = () => {
+  const [teams, setTeams] = useState({ matches: [] });
 
-    const [teams, setTeams] = useState({matches: []});
-    
-
-    useEffect(
-        () => {
-            const fetchAllTeams = async () => {
-                const response = await fetch('http://localhost:8080/team');
-                const data = await response.json();
-                console.log(data);
-                setTeams (data);
-            };
-            fetchAllTeams();
-        },[]
-    )
-
-
+  // const response = await fetch("http://localhost:8080/team");
+  useEffect(() => {
+    const fetchAllTeams = async () => {
+      const response = await fetch(`${process.env.REACT_APP_API_ROOT_URL}/team`);
+      const data = await response.json();
+    //   console.log(data);
+      setTeams(data);
+    };
+    fetchAllTeams();
+  }, []);
 
   return (
-    <div className='HomePage'>
-      <div className='header-section'>
-        <h1 className='app-name'>Shamilka IPL Dashboard</h1> 
+    <div className="HomePage">
+      <div className="header-section">
+        <h1 className="app-name">Shamilka IPL Dashboard</h1>
       </div>
-      <div className='team-grid'>
-      { teams.length && teams.map(team => <TeamTile key={team.id} teamName={team.teamName} />)}
+      <div className="team-grid">
+        {teams.length &&
+          teams.map((team) => (
+            <TeamTile key={team.id} teamName={team.teamName} />
+          ))}
       </div>
-      
     </div>
-  )
-}
-
-
+  );
+};
